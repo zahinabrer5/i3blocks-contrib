@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Load environment variables
+set -a  # Automatically export all variables
+source ~/.config/i3blocks/scripts/.env
+set +a
+
 command -v jq >/dev/null 2>&1 || { echo >&2 "Program 'jq' required but it is not installed.
 Aborting."; exit 1; }
 command -v curl >/dev/null 2>&1 || { echo >&2 "Program 'curl' required but is not installed.
@@ -7,7 +12,7 @@ Aborting."; exit 1; }
 
 # To use this script you need to create an API key here https://home.openweathermap.org
 # You need to put your Open Weather APIKEY here:
-APIKEY="5d55236d59e62a02783ddd614d512090"
+APIKEY="${OPENWEATHER_API_KEY}"
 # find your City ID here: https://openweathermap.org/
 # search for your city and copy the ID from the URL inside the browser.
 CITY_ID="6094817"

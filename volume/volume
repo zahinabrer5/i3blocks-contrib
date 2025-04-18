@@ -77,12 +77,20 @@ format() {
   perl_filter+=$([[ $STEP = *dB ]] && echo '$3' || echo '$1')
   perl_filter+='"; exit}'
   output=$(perl -ne "$perl_filter")
-  echo "$LABEL$output"
+  echo "$LABEL $output"
 }
 
 #------------------------------------------------------------------------
 
 case $BLOCK_BUTTON in
+  1)  # Left-click → Open pavucontrol (floating)
+    if ! pgrep -x "pavucontrol" > /dev/null; then
+      pavucontrol &  # Launch if not running
+    else
+      # Bring existing window to focus
+      i3-msg "[class="Pavucontrol"] focus"
+    fi
+    ;;
   3) amixer $AMIXER_PARAMS -q -D $MIXER sset $SCONTROL $(capability) toggle ;;  # right click, mute/unmute
   4) amixer $AMIXER_PARAMS -q -D $MIXER sset $SCONTROL $(capability) ${STEP}+ unmute ;; # scroll up, increase
   5) amixer $AMIXER_PARAMS -q -D $MIXER sset $SCONTROL $(capability) ${STEP}- unmute ;; # scroll down, decrease

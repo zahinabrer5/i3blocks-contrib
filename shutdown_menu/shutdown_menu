@@ -38,7 +38,7 @@ BORDER_COLOR="${BORDER_COLOR:-#222222}"
 
 # Options not related to colors
 ROFI_TEXT="${ROFI_TEXT:-Menu:}"
-ROFI_OPTIONS=(${ROFI_OPTIONS:--theme-str 'window {width: 11%; border: 2;} listview {scrollbar: false;}' -location 3})
+ROFI_OPTIONS=(${ROFI_OPTIONS:--theme-str 'window {width: 11%; height: 35%; border: 2;} listview {scrollbar: false;}' -location 5})
 
 # Zenity options
 ZENITY_TITLE="${ZENITY_TITLE:-Menu}"
@@ -114,13 +114,13 @@ typeset -A menu
 
 # Menu with keys/commands
 menu=(
-  [Shutdown]="systemctl poweroff"
-  [Reboot]="systemctl reboot"
+  [Shutdown]="~/ricing/i3/i3-restore/i3-save && systemctl poweroff"
+  [Reboot]="~/ricing/i3/i3-restore/i3-save && systemctl reboot"
   [Hibernate]="systemctl hibernate"
   [Suspend]="systemctl suspend"
-  [Halt]="systemctl halt"
+  [Halt]="~/ricing/i3/i3-restore/i3-save &&  systemctl halt"
   [Lock]="${LOCKSCRIPT:-i3lock --color=${BG_COLOR#"#"}}"
-  [Logout]="i3-msg exit"
+  [Logout]="~/ricing/i3/i3-restore/i3-save &&  i3-msg exit"
   [Cancel]=""
 )
 menu_nrows=${#menu[@]}

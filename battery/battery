@@ -25,6 +25,23 @@ my $short_text;
 my $bat_number = $ENV{BAT_NUMBER} || 0;
 my $label = $ENV{LABEL} || "";
 
+# Get CPU governor with hash dispatch
+my %governor_emoji = (
+	_default     => '',
+	powersave    => '',
+	performance  => '',
+	ondemand     => '',
+	conservative => '',
+	userspace    => '',
+	schedutil    => '',
+);
+
+my $governor_emoji = '';
+if (open(my $gov_fh, '<', '/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor')) {
+	chomp(my $governor = <$gov_fh>);
+	$governor_emoji = $governor_emoji{$governor} // '';
+}
+
 # read the first line of the "acpi" command output
 open (ACPI, "acpi -b 2>/dev/null| grep 'Battery $bat_number' |") or die;
 $acpi = <ACPI>;
@@ -32,8 +49,8 @@ close(ACPI);
 
 # fail on unexpected output
 if (not defined($acpi)) {
-    # don't print anything to stderr if there is no battery
-    exit(0);
+	# don't print anything to stderr if there is no battery
+	exit(0);
 }
 elsif ($acpi !~ /: ([\w\s]+), (\d+)%/) {
 	die "$acpi\n";
@@ -41,12 +58,12 @@ elsif ($acpi !~ /: ([\w\s]+), (\d+)%/) {
 
 $status = $1;
 $percent = $2;
-$full_text = "$label$percent%";
+$full_text = "";
 
 if ($status eq 'Discharging') {
-	$full_text .= ' DIS';
+	$full_text .= ' DIS ';
 } elsif ($status eq 'Charging') {
-	$full_text .= ' CHR';
+	$full_text .= ' CHR ';
 } elsif ($status eq 'Unknown') {
 	open (AC_ADAPTER, "acpi -a |") or die;
 	$ac_adapt = <AC_ADAPTER>;
@@ -63,11 +80,16 @@ if ($status eq 'Discharging') {
 	}
 }
 
-$short_text = $full_text;
+$full_text .= "$percent%";
 
 if ($acpi =~ /(\d\d:\d\d):/) {
 	$full_text .= " ($1)";
 }
+
+# Append governor emoji if we have one
+$full_text .= " $governor_emoji" if $governor_emoji;
+
+$short_text = $full_text;
 
 # print text
 print "$full_text\n";

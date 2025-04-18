@@ -38,7 +38,7 @@ This repository contains a set of scripts (a.k.a. *blocklets*) for link:https://
 | link:memory[] | Show ram or swap usage
 | link:monitor_manager[] | Manage monitor on/off, resolution, extend, clone
 | link:nm-vpn[] | Show vpn status using network manager
-| link:openweather-city[] | Show weather in your city (hardcoded in the script)
+| link:openweather[] | Show weather in your city (hardcoded in the script)
 | link:openvpn[] | Show openvpn status
 | link:rofi-calendar[] | Current date/time and click for calendar using rofi
 | link:rofi-wttr[] | Current weather and click for weather forecast using rofi
